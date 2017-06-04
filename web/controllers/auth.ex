@@ -19,12 +19,12 @@ defmodule Rumbl.Auth do
     |> configure_session(renew: true)
   end
 
-  def login_by_username_and_password(conn, username, password, opts) do
+  def login_by_username_and_password(conn, username, given_pass, opts) do
     repo = Keyword.fetch!(opts, :repo)
     user = repo.get_by(Rumbl.User, username: username)
 
     cond do
-      user && checkpw(password, user.password_hash) ->
+      user && checkpw(given_pass, user.password_hash) ->
         {:ok, login(conn, user)}
       user ->
         {:error, :unauthorized, conn}
