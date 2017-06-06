@@ -14,14 +14,13 @@ defmodule Rumbl.User do
   def changeset(model, params \\ %{}) do
     model
     |> cast(params, [:name, :username])
-    |> unique_constraint(:username)
     |> validate_length(:username, min: 1, max: 20)
+    |> unique_constraint(:username)
   end
 
   def registration_changeset(model, params) do
     model
     |> changeset(params)
-    |> unique_constraint(:username)
     |> cast(params, [:password])
     |> validate_length(:password, min: 6, max: 100)
     |> put_pass_hash
