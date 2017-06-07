@@ -31,6 +31,31 @@ defmodule Rumbl.VideoControllerTest do
   end
 
   @tag login_as: "Kira"
+  test "authorizes actions against access by other users",
+    %{conn: conn, user: owner} do
+
+    video = insert_video(owner, title: "The best video")
+    non_owner = insert_user(username: "Hacker")
+    conn = assign(conn, :current_user, non_owner)
+
+    assert_error_sent :not_found, fn ->
+      get(conn, video_path(conn, :show, video))
+    end
+
+    assert_error_sent :not_found, fn ->
+      get(conn, video_path(conn, :edit, video))
+    end
+
+    assert_error_sent :not_found, fn ->
+      get(conn, video_path(conn, :update, video, video: @valid_attrs))
+    end
+
+    assert_error_sent :not_found, fn ->
+      get(conn, video_path(conn, :delete, video))
+    end
+  end
+
+  @tag login_as: "Kira"
   test "renders form for new videos", %{conn: conn} do
     conn = get conn, video_path(conn, :new)
     assert html_response(conn, 200) =~ "New video"
