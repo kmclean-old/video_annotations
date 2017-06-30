@@ -7,7 +7,7 @@ defmodule Rumbl.VideoControllerTest do
 
   setup %{conn: conn} = config do
     if username = config[:login_as] do
-      user = insert_user(username: username)
+      user = insert_user(%{username: username})
       conn = assign(build_conn(), :current_user, user)
       {:ok, conn: conn, user: user}
     else
@@ -35,7 +35,7 @@ defmodule Rumbl.VideoControllerTest do
     %{conn: conn, user: owner} do
 
     video = insert_video(owner, title: "The best video")
-    non_owner = insert_user(username: "Hacker")
+    non_owner = insert_user(%{username: "Hacker"})
     conn = assign(conn, :current_user, non_owner)
 
     assert_error_sent :not_found, fn ->
@@ -65,7 +65,7 @@ defmodule Rumbl.VideoControllerTest do
   test "lists all user's videos on index", %{conn: conn, user: user} do
     user_video = insert_video(user, title: "The best video")
     other_video =
-      insert_video(insert_user(username: "Other user"), title: "Other video")
+      insert_video(insert_user(%{username: "Other user"}), title: "Other video")
 
     conn = get conn, video_path(conn, :index)
     assert html_response(conn, 200) =~ ~r/Listing videos/

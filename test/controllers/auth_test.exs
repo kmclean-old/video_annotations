@@ -68,7 +68,7 @@ defmodule Rumbl.AuthTest do
   end
 
   test "login with a valid username and password", %{conn: conn} do
-    user = insert_user(username: "me", password: "secret")
+    user = insert_user(%{username: "me", password: "secret"})
     {:ok, conn} =
       Auth.login_by_username_and_password(conn, "me", "secret", repo: Repo)
 
@@ -81,7 +81,7 @@ defmodule Rumbl.AuthTest do
   end
 
   test "login attemp with a bad password", %{conn: conn} do
-    _ = insert_user(username: "me", password: "secret")
+    _ = insert_user(%{username: "me", password: "secret"})
 
     assert {:error, :unauthorized, _conn} =
       Auth.login_by_username_and_password(conn, "me", "wrong", repo: Repo)
