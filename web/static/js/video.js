@@ -19,7 +19,7 @@ let Video = {
     vidChannel.on("ping", ({count}) => console.log("PING", count))
 
     postButton.addEventListener("click", e => {
-      let payload = {body: msginput.value, at: Player.getCurrentTime()}
+      let payload = {body: msgInput.value, at: Player.getCurrentTime()}
       vidChannel.push("new_annotation", payload)
         .receive("error", e => console.log(e))
       msgInput.value = ""

@@ -80,7 +80,7 @@ defmodule Rumbl.AuthTest do
       Auth.login_by_username_and_password(conn, "missing", "secret", repo: Repo)
   end
 
-  test "login attemp with a bad password", %{conn: conn} do
+  test "login attempt with a bad password", %{conn: conn} do
     _ = insert_user(%{username: "me", password: "secret"})
 
     assert {:error, :unauthorized, _conn} =
