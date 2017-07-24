@@ -3,12 +3,14 @@ defmodule Rumbl.VideoChannel do
 
   alias Rumbl.{ Annotation, User, UserView, Video }
 
-  def join("videos:" <> video_id, _params, socket) do
+  def join("videos:" <> video_id, params, socket) do
+    last_seen_id = params["last_seen_id"] || 0
     video_id = String.to_integer(video_id)
     video = Repo.get!(Video, video_id)
 
     annotations = Repo.all(
       from a in assoc(video, :annotations),
+        where: a.id > ^last_seen_id,
         order_by: [asc: a.at, asc: a.id],
         limit: 200,
         preload: [:user]
@@ -16,9 +18,8 @@ defmodule Rumbl.VideoChannel do
 
     response = %{
       annotations: Phoenix.View.render_many(
-        annotations, AnnotationView, "annotation.json"
-      )
-    }
+        annotations, AnnotationView, "annotation.json")}
+
     {:ok, response, assign(socket, :video_id, video_id)}
   end
 
