@@ -28,7 +28,7 @@ defmodule Rumbl.InfoSystem do
     {pid, monitor_ref, query_ref}
   end
 
-  defp await_results(children, _opts) do
+  defp await_results(children, opts) do
     timeout = opts[:timeout] || 5000
     timer = Process.send_after(self(), :timedout, timeout)
     results = await_result(children, [], :infinity)
@@ -60,7 +60,7 @@ defmodule Rumbl.InfoSystem do
   end
 
   defp kill(pid, monitor_ref) do
-    Process.demonitor(ref, [:flush])
+    Process.demonitor(monitor_ref, [:flush])
     Process.exit(pid, :kill)
   end
 

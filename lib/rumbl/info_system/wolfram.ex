@@ -26,7 +26,7 @@ defmodule Rumbl.InfoSystem.Wolfram do
 
   defp fetch_xml(query_string) do
     {:ok, {_, _, body}} = :httpc.request(
-      String.to_char_list("http://api.wolframalpha.com/v2/query" <>
+      String.to_charlist("http://api.wolframalpha.com/v2/query" <>
         "?appid=#{app_id()}" <>
         "&input=#{URI.encode(query_string)}&format=plaintext"))
     body
