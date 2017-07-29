@@ -1,7 +1,7 @@
 defmodule Rumbl.VideoChannel do
   use Rumbl.Web, :channel
 
-  alias Rumbl.{ Annotation, InfoSystem, User, Video }
+  alias Rumbl.{ Annotation, User, Video }
 
   def join("videos:" <> video_id, params, socket) do
     last_seen_id = params["last_seen_id"] || 0
