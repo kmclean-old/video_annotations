@@ -1,9 +1,10 @@
 defmodule Rumbl.VideoControllerTest do
   use Rumbl.ConnCase
-
   alias Rumbl.Video
   @valid_attrs %{url: "https://youtu.be", title: "vid", description: "a vid"}
   @invalid_attrs %{title: "invalid"}
+
+  defp video_count(query), do: Repo.one(from v in query, select: count(v.id))
 
   setup %{conn: conn} = config do
     if username = config[:login_as] do
@@ -98,7 +99,7 @@ defmodule Rumbl.VideoControllerTest do
   @tag login_as: "Kira"
   test "renders page not found when id doesn't exist", %{conn: conn} do
     assert_raise Ecto.NoResultsError, fn ->
-      get conn, video_path(conn, :show, -1)
+      get conn, video_path(conn, :show, 123456789)
     end
   end
 
@@ -113,10 +114,10 @@ defmodule Rumbl.VideoControllerTest do
   @tag login_as: "Kira"
   test "updates chosen resource and redirects with valid data",
     %{conn: conn, user: user} do
-    video = insert_video(user, title: "The best video")
-    conn = put conn, video_path(conn, :update, video), video: @valid_attrs
-    assert redirected_to(conn) == video_path(conn, :show, video)
-    assert Repo.get_by(Video, @valid_attrs)
+    video = insert_video(user, @valid_attrs)
+    conn = put conn, video_path(conn, :update, video), video: %{title: "New"}
+    assert html_response(conn, 302)
+    assert Repo.get(Video, video.id).title == "New"
   end
 
   @tag login_as: "Kira"
