@@ -1,4 +1,4 @@
-defmodule Rumbl.InfoSystem.Supervisor do
+defmodule InfoSystem.Supervisor do
   use Supervisor
 
   def start_link() do
@@ -7,7 +7,7 @@ defmodule Rumbl.InfoSystem.Supervisor do
 
   def init(_opts) do
     children = [
-      worker(Rumbl.InfoSystem, [], restart: :temporary)
+      worker(InfoSystem, [], restart: :temporary)
     ]
 
     supervise children, strategy: :simple_one_for_one

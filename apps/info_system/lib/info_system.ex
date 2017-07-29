@@ -1,5 +1,5 @@
-defmodule Rumbl.InfoSystem do
-  @backends [Rumbl.InfoSystem.Wolfram]
+defmodule InfoSystem do
+  @backends [InfoSystem.Wolfram]
 
   defmodule Result do
     defstruct score: 0, text: nil, url: nil, backend: nil
@@ -7,6 +7,10 @@ defmodule Rumbl.InfoSystem do
 
   def start_link(backend, query, query_ref, owner, limit) do
     backend.start_link(query, query_ref, owner, limit)
+  end
+
+  def hello do
+    :world
   end
 
   def compute(query, opts \\ []) do
@@ -23,7 +27,7 @@ defmodule Rumbl.InfoSystem do
   defp spawn_query(backend, query, limit) do
     query_ref = make_ref()
     opts = [backend, query, query_ref, self(), limit]
-    {:ok, pid} = Supervisor.start_child(Rumbl.InfoSystem.Supervisor, opts)
+    {:ok, pid} = Supervisor.start_child(InfoSystem.Supervisor, opts)
     monitor_ref = Process.monitor(pid)
     {pid, monitor_ref, query_ref}
   end
@@ -73,3 +77,4 @@ defmodule Rumbl.InfoSystem do
     end
   end
 end
+
