@@ -9,10 +9,6 @@ defmodule InfoSystem do
     backend.start_link(query, query_ref, owner, limit)
   end
 
-  def hello do
-    :world
-  end
-
   def compute(query, opts \\ []) do
     limit = opts[:limit] || 10
     backends = opts[:backends] || @backends
