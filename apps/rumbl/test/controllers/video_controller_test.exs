@@ -135,6 +135,4 @@ defmodule Rumbl.VideoControllerTest do
     assert redirected_to(conn) == video_path(conn, :index)
     refute Repo.get(Video, video.id)
   end
-
-  defp video_count(query), do: Repo.one(from v in query, select: count(v.id))
 end
